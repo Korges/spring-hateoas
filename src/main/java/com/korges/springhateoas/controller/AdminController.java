@@ -1,6 +1,7 @@
 package com.korges.springhateoas.controller;
 
-import com.korges.springhateoas.pojo.Moderator;
+import com.korges.springhateoas.dto.ModeratorDTO;
+import com.korges.springhateoas.entity.Moderator;
 import com.korges.springhateoas.service.ModeratorService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
@@ -28,31 +29,36 @@ public class AdminController {
     private final ModeratorService moderatorService;
 
     @GetMapping
-    public ResponseEntity<CollectionModel<Moderator>> findAllModerators() {
+    public ResponseEntity<CollectionModel<ModeratorDTO>> findAllModerators() {
         Link link = linkTo(AdminController.class).withSelfRel();
-        final Set<Moderator> response = moderatorService.findAll();
+        final Set<ModeratorDTO> response = moderatorService.findAll();
         response.forEach(x -> x.add(linkTo(AdminController.class).slash(x.getId()).withSelfRel()));
-        CollectionModel<Moderator> model = new CollectionModel<>(response, link);
+        CollectionModel<ModeratorDTO> model = new CollectionModel<>(response, link);
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<EntityModel<Moderator>> findModeratorById(@PathVariable("id") long id) {
+    public ResponseEntity<EntityModel<ModeratorDTO>> findModeratorById(@PathVariable("id") long id) {
         Link link = linkTo(AdminController.class).slash(id).withSelfRel();
-        Moderator response = moderatorService.findById(id);
-        EntityModel<Moderator> model = new EntityModel<>(response, link);
+        ModeratorDTO response = moderatorService.findById(id);
+        EntityModel<ModeratorDTO> model = new EntityModel<>(response, link);
         return new ResponseEntity<>(model, HttpStatus.CREATED);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<String> deleteModerator(@PathVariable("id") long id) {
-        return new ResponseEntity<>("Dupa", HttpStatus.ACCEPTED);
+    public ResponseEntity<EntityModel<String>> deleteModerator(@PathVariable("id") long id) {
+        Link link = linkTo(AdminController.class).slash(id).withSelfRel();
+        moderatorService.deleteById(id);
+        EntityModel<String> model = new EntityModel<>("Moderator Deleted", link);
+        return new ResponseEntity<>(model, HttpStatus.ACCEPTED);
     }
 
     @PostMapping
-    public ResponseEntity<Moderator> addNewModerator(@RequestBody Moderator moderator) {
-        Moderator response = moderatorService.addNewModerator(moderator);
-        return new ResponseEntity<>(response, HttpStatus.OK);
+    public ResponseEntity<EntityModel<ModeratorDTO>> addNewModerator(@RequestBody Moderator moderator) {
+        Link link = linkTo(AdminController.class).withSelfRel();
+        ModeratorDTO response = moderatorService.addNewModerator(moderator);
+        EntityModel<ModeratorDTO> model = new EntityModel<>(response, link);
+        return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
 }

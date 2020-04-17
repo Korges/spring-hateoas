@@ -1,15 +1,13 @@
-package com.korges.springhateoas.pojo;
+package com.korges.springhateoas.entity;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
-import org.springframework.hateoas.RepresentationModel;
 
-import java.io.Serializable;
 import java.time.LocalDate;
 
 @Data
 @AllArgsConstructor
-public class Moderator extends RepresentationModel<Moderator> implements Serializable {
+public class Moderator {
     private Long id;
     private String nickname;
     private String firstName;
