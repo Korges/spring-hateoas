@@ -24,22 +24,22 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/admin")
-public class AdminController {
+public class ModeratorController {
 
     private final ModeratorService moderatorService;
 
     @GetMapping
     public ResponseEntity<CollectionModel<ModeratorDTO>> findAllModerators() {
-        Link link = linkTo(AdminController.class).withSelfRel();
+        Link link = linkTo(ModeratorController.class).withSelfRel();
         final Set<ModeratorDTO> response = moderatorService.findAll();
-        response.forEach(x -> x.add(linkTo(AdminController.class).slash(x.getId()).withSelfRel()));
+        response.forEach(x -> x.add(linkTo(ModeratorController.class).slash(x.getId()).withSelfRel()));
         CollectionModel<ModeratorDTO> model = new CollectionModel<>(response, link);
         return new ResponseEntity<>(model, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ModeratorDTO>> findModeratorById(@PathVariable("id") long id) {
-        Link link = linkTo(AdminController.class).slash(id).withSelfRel();
+        Link link = linkTo(ModeratorController.class).slash(id).withSelfRel();
         ModeratorDTO response = moderatorService.findById(id);
         EntityModel<ModeratorDTO> model = new EntityModel<>(response, link);
         return new ResponseEntity<>(model, HttpStatus.CREATED);
@@ -47,7 +47,7 @@ public class AdminController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<String>> deleteModerator(@PathVariable("id") long id) {
-        Link link = linkTo(AdminController.class).slash(id).withSelfRel();
+        Link link = linkTo(ModeratorController.class).slash(id).withSelfRel();
         moderatorService.deleteById(id);
         EntityModel<String> model = new EntityModel<>("Moderator Deleted", link);
         return new ResponseEntity<>(model, HttpStatus.ACCEPTED);
@@ -55,7 +55,7 @@ public class AdminController {
 
     @PostMapping
     public ResponseEntity<EntityModel<ModeratorDTO>> addNewModerator(@RequestBody Moderator moderator) {
-        Link link = linkTo(AdminController.class).withSelfRel();
+        Link link = linkTo(ModeratorController.class).withSelfRel();
         ModeratorDTO response = moderatorService.addNewModerator(moderator);
         EntityModel<ModeratorDTO> model = new EntityModel<>(response, link);
         return new ResponseEntity<>(model, HttpStatus.OK);
