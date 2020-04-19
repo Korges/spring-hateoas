@@ -8,7 +8,6 @@ import java.util.Set;
 
 
 public interface ForumThreadService {
-
     Set<ForumThreadResource> findAll();
     ForumThreadResource findById(Long id);
     Set<PostResource> findAllPostsByThread(Long id);
