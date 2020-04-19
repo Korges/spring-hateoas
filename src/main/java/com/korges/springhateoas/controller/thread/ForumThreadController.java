@@ -5,6 +5,7 @@ import com.korges.springhateoas.service.thread.ForumThreadService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.hateoas.CollectionModel;
 import org.springframework.hateoas.EntityModel;
+import org.springframework.hateoas.Link;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
@@ -18,6 +19,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Set;
 
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping("/thread")
@@ -28,7 +31,8 @@ public class ForumThreadController {
     @GetMapping
     public ResponseEntity<CollectionModel<ForumThreadResource>> findAllThread() {
         final Set<ForumThreadResource> response = forumThreadService.findAll();
-        final CollectionModel<ForumThreadResource> resource = new CollectionModel<>(response);
+        Link link = linkTo(ForumThreadController.class).withSelfRel();
+        final CollectionModel<ForumThreadResource> resource = new CollectionModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
