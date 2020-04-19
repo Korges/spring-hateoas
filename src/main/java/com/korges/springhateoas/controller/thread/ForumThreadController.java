@@ -40,7 +40,8 @@ public class ForumThreadController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ForumThreadResource>> findOneById(@PathVariable final Long id) {
         final ForumThreadResource response = forumThreadService.findById(id);
-        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response);
+        Link link = linkTo(ForumThreadController.class).withSelfRel();
+        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
@@ -48,7 +49,8 @@ public class ForumThreadController {
     @PostMapping
     public ResponseEntity<EntityModel<ForumThreadResource>> postNewThread(@RequestBody final ForumThread thread) {
         final ForumThreadResource response = forumThreadService.save(thread);
-        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response);
+        Link link = linkTo(ForumThreadController.class).withSelfRel();
+        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
@@ -57,7 +59,8 @@ public class ForumThreadController {
     public ResponseEntity<EntityModel<ForumThreadResource>> updateThread(@PathVariable final Long id,
                                                                          @RequestBody final ForumThread thread) {
         final ForumThreadResource response = forumThreadService.update(id, thread);
-        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response);
+        Link link = linkTo(ForumThreadController.class).withSelfRel();
+        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
@@ -65,7 +68,8 @@ public class ForumThreadController {
     @DeleteMapping("/{id}")
     public ResponseEntity<EntityModel<ForumThreadResource>> deleteThread(@PathVariable final Long id) {
         final ForumThreadResource response = forumThreadService.deleteById(id);
-        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response);
+        Link link = linkTo(ForumThreadController.class).withSelfRel();
+        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }
