@@ -1,5 +1,6 @@
 package com.korges.springhateoas.entity;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import lombok.Data;
 
 import javax.persistence.Entity;
@@ -19,6 +20,7 @@ public class ForumThread {
     private String title;
     private String description;
     private LocalDate creationDate;
+    @JsonIgnore
     @OneToMany
     private Set<Post> postSet;
 }

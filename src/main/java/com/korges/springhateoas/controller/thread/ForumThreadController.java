@@ -20,7 +20,7 @@ import java.util.Set;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/user")
+@RequestMapping("/thread")
 public class ForumThreadController {
 
     private final ForumThreadService forumThreadService;
