@@ -1,5 +1,6 @@
 package com.korges.springhateoas.controller.thread;
 
+import com.korges.springhateoas.controller.post.PostResource;
 import com.korges.springhateoas.entity.ForumThread;
 import com.korges.springhateoas.service.thread.ForumThreadService;
 import lombok.RequiredArgsConstructor;
@@ -20,6 +21,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.Set;
 
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
+import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RequiredArgsConstructor
 @RestController
@@ -40,8 +42,17 @@ public class ForumThreadController {
     @GetMapping("/{id}")
     public ResponseEntity<EntityModel<ForumThreadResource>> findOneById(@PathVariable final Long id) {
         final ForumThreadResource response = forumThreadService.findById(id);
+        response.add(linkTo(methodOn(ForumThreadController.class).findThreadPosts(id)).withRel("posts"));
+        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response);
+
+        return new ResponseEntity<>(resource, HttpStatus.OK);
+    }
+
+    @GetMapping("/{id}/post")
+    public ResponseEntity<CollectionModel<PostResource>> findThreadPosts(@PathVariable final Long id) {
+        final Set<PostResource> response = forumThreadService.findAllPostsByThread(id);
         Link link = linkTo(ForumThreadController.class).withSelfRel();
-        final EntityModel<ForumThreadResource> resource = new EntityModel<>(response, link);
+        final CollectionModel<PostResource> resource = new CollectionModel<>(response, link);
 
         return new ResponseEntity<>(resource, HttpStatus.OK);
     }

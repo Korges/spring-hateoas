@@ -1,5 +1,6 @@
 package com.korges.springhateoas.service.thread;
 
+import com.korges.springhateoas.controller.post.PostResource;
 import com.korges.springhateoas.controller.thread.ForumThreadResource;
 import com.korges.springhateoas.entity.ForumThread;
 import com.korges.springhateoas.repository.ForumThreadRepository;
@@ -30,6 +31,17 @@ public class ForumThreadServiceImpl implements ForumThreadService {
                 .findById(id)
                 .map(ForumThreadResource::new)
                 .orElseThrow(PropertyNotFoundException::new);
+    }
+
+    @Override
+    public Set<PostResource> findAllPostsByThread(Long id) {
+         return forumThreadRepository
+                 .findById(id)
+                 .map(x -> x.getPostSet()
+                         .stream()
+                         .map(PostResource::new)
+                         .collect(Collectors.toSet()))
+                 .orElseThrow(PropertyNotFoundException::new);
     }
 
     @Override
